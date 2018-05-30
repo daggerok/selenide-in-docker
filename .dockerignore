@@ -1,0 +1,7 @@
+.travis.yml
+.gitignore
+.idea
+.gradle
+support@travis-ci.com-*
+Dockerfile*
+README.adoc
