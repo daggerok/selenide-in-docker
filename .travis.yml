@@ -1,3 +1,6 @@
+service:
+- docker
+
 env:
   global:
   - TERM=dumb
@@ -13,6 +16,7 @@ addons:
     - fonts-liberation
     - wget
     - bash
+    - docker-ce
 
 install: true
 before_script:
@@ -24,6 +28,10 @@ before_script:
 
 script:
 - bash gradlew
+- echo "this build in Travis should pass!"
+- echo "but not that in docker..."
+- docker build -t selenide-in-docker .
+- docker run --rm --name tests -v ~/.gradle:/root/.gradle -v ~/.m2:/root/.m2 selenide-in-docker
 
 cache:
   directories:

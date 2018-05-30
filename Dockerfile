@@ -1,0 +1,27 @@
+FROM ubuntu:14.04
+LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
+ENV DISPLAY=':99' \
+    DEBIAN_FRONTEND='noninteractive' \
+    JAVA_HOME='/usr/lib/jvm/java-8-oracle'
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+RUN apt-get update -y \
+ && apt-get install -y wget bash software-properties-common \
+ && apt-add-repository -y ppa:webupd8team/java \
+ && apt-get update -y
+RUN echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
+ && echo debconf shared/accepted-oracle-license-v1-1   seen true | debconf-set-selections \
+ && apt-get install -y \
+      oracle-java8-installer oracle-java8-set-default oracle-java8-unlimited-jce-policy
+RUN apt-get install -y \
+      xvfb libappindicator1 fonts-liberation chromium-chromedriver libxi6 libgconf-2-4 \
+ && ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+RUN touch /usr/bin/docker-entrypoint \
+ && { \
+      echo '#!/bin/bash'; \
+      echo 'Xvfb -ac :99 -screen 0 1280x1024x16 &'; \
+    } > /usr/bin/docker-entrypoint \
+ && chmod +x /usr/bin/docker-entrypoint
+CMD /bin/bash
+WORKDIR /root/app
+ENTRYPOINT /usr/bin/docker-entrypoint && ./gradlew -Si clean check
+COPY . /root/app
