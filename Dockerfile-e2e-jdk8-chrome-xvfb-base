@@ -55,9 +55,9 @@ ARG JAVA_OPTS_ARGS='\
  -XshowSettings:vm '
 ENV JAVA_OPTS="${JAVA_OPTS} ${JAVA_OPTS_ARGS}"
 
-### chrome based image usage
-## build base image first:
-#docker build -f Dockerfile-e2e-jdk8-chrome-xvfb-base -t daggerok/e2e-jdk8-chrome-xvfb-base .
+## chrome based image usage - build base image first:
+# docker build -f Dockerfile-e2e-jdk8-chrome-xvfb-base -t daggerok/e2e-jdk8-chrome-xvfb-base .
+
 ## create e2e firefox test image based on previous:
 # FROM daggerok/e2e-jdk8-chrome-xvfb-base
 # WORKDIR /home/e2e/project-directory

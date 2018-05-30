@@ -2,13 +2,13 @@ FROM daggerok/e2e-jdk8-firefox-xvfb-base
 LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
 WORKDIR /home/e2e/selenide-in-docker
 CMD /bin/bash
-ENTRYPOINT sudo chown -R e2e:e2e . \
-        && . /usr/bin/start-xvfb \
-        && ./gradlew -Si check firefox
+ENTRYPOINT pwd && ls -lah . && sudo chown -R e2e:e2e . && pwd && ls -lah . \
+        && . /usr/bin/start-xvfb && ./gradlew -Si check firefox
 COPY . .
 
-### firefox client usage
-## build image under test:
-#docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
+## firefox client usage - build image under test:
+# docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
+
 ## run selenide e2e tests in firefox client:
-#docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-firefox-tests
+# docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-firefox-tests
+# docker run --rm --name run-e2e-firefox-tests daggerok/e2e-firefox-tests
