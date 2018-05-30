@@ -2,6 +2,7 @@ FROM ubuntu:14.04
 LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
 ENV DISPLAY=':99' \
     DEBIAN_FRONTEND='noninteractive' \
+    CHROME_BIN='/usr/bin/google-chrome' \
     JAVA_HOME='/usr/lib/jvm/java-8-oracle'
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 RUN apt-get update -y \
@@ -17,11 +18,15 @@ RUN apt-get install -y \
  && wget https://chromedriver.storage.googleapis.com/2.38/chromedriver_linux64.zip \
  && unzip chromedriver* \
  && mv -f chromedriver /usr/bin/ \
- && rm -rf chromedriver*.zip
+ && rm -rf chromedriver*.zip \
+ && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+ && dpkg -i google-chrome*.deb \
+ && rm -rf *.deb
 RUN touch /usr/bin/docker-entrypoint \
  && { \
       echo '#!/bin/bash'; \
-      echo 'Xvfb -ac :99 -screen 0 1280x1024x16 &'; \
+      echo 'sh -e /etc/init.d/xvfb start'; \
+      echo '#Xvfb -ac :99 -screen 0 1280x1024x16 &'; \
     } > /usr/bin/docker-entrypoint \
  && chmod +x /usr/bin/docker-entrypoint
 CMD /bin/bash
