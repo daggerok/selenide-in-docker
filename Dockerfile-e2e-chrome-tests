@@ -1,0 +1,14 @@
+FROM daggerok/e2e-jdk8-chrome-xvfb-base
+LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
+WORKDIR /home/e2e/selenide-in-docker
+CMD /bin/bash
+ENTRYPOINT sudo chown -R e2e:e2e /home/e2e/selenide-in-docker \
+        && . /usr/bin/start-xvfb \
+        && ./gradlew -Si check chrome
+COPY . .
+
+### chrome client usage
+## build image under test:
+#docker build -f Dockerfile-e2e-chrome-tests -t daggerok/e2e-chrome-tests .
+## run selenide e2e tests in chrome client:
+#docker run --rm --name run-e2e-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-chrome-tests
