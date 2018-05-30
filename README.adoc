@@ -1,4 +1,4 @@
-= selenide-selenium-hub
+= selenide-selenium-hub image:https://travis-ci.org/daggerok/selenide-in-docker.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/selenide-in-docker"]
 
 It's all about link:http://disq.us/p/1svgnn3[my question on Selenide FAQ] regarding running selenide tests in docker...
 
