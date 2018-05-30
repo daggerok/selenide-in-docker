@@ -23,6 +23,16 @@ RUN apt-get install -y \
  && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
  && dpkg -i google-chrome*.deb \
  && rm -rf *.deb
+#RUN echo "deb http://ppa.launchpad.net/mozillateam/firefox-next/ubuntu trusty main" \
+#      > /etc/apt/sources.list.d//mozillateam-firefox-next-trusty.list \
+# && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CE49EC21 \
+# && apt-get update -y \
+# && apt-get install -y firefox xvfb python-pip \
+# && pip install selenium \
+# && wget https://gist.githubusercontent.com/griggheo/d943e33ea4d419e343aa/raw/2cb1400edb71eabe59a1ed425ed4ae48d16bf093/xvfb.init \
+# && mv -f ./xvfb.init /etc/init.d/ \
+# && chmod +x /etc/init.d/xvfb \
+# && update-rc.d xvfb defaults
 RUN touch /usr/bin/docker-entrypoint \
  && { \
       echo '#!/bin/bash'; \
@@ -32,5 +42,7 @@ RUN touch /usr/bin/docker-entrypoint \
  && chmod +x /usr/bin/docker-entrypoint
 CMD /bin/bash
 WORKDIR /root/app
-ENTRYPOINT /usr/bin/docker-entrypoint && ./gradlew -Si clean check
+ENTRYPOINT /usr/bin/docker-entrypoint && ./gradlew -Si clean headless chrome check
 COPY . /root/app
+# docker build -t tests .
+# docker run --rm --name run-tests -v ~/.gradle:/root/.gradle -v ~/.m2:/root/.m2 tests
