@@ -32,37 +32,37 @@ script:
 - #bash gradlew -S clean headless firefox test
 - ./gradlew clean
 - # 2) these builds using firefox / headless firefox in Dockerfile now is running well ...finally!"
+- SUFFIX="e2e-jdk8-firefox-xvfb-base"
+- DOCKER_BASE_IMAGE="${DOCKER_USERNAME}/${SUFFIX}"
 - |
   if [ "'true'" == "'${PUBLISH_BASE_DOCKER_IMAGE}'"  ]; then
-    SUFFIX="e2e-jdk8-firefox-xvfb-base"
-    DOCKER_IMAGE="${DOCKER_USERNAME}/${SUFFIX}"
-    docker build -f Dockerfile-${SUFFIX} -t ${DOCKER_IMAGE} .
+    docker build -f Dockerfile-${SUFFIX} -t ${DOCKER_BASE_IMAGE} .
     echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-    docker push ${DOCKER_IMAGE}
+    docker push ${DOCKER_BASE_IMAGE}
   fi;
-- docker pull daggerok/e2e-jdk8-firefox-xvfb-base
-- docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
+- docker pull ${DOCKER_BASE_IMAGE}
+- docker build -f Dockerfile-e2e-firefox-tests -t ${DOCKER_USERNAME}/e2e-firefox-tests .
 - docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2
-  daggerok/e2e-firefox-tests
-- docker build -f Dockerfile-e2e-headless-firefox-tests -t daggerok/e2e-headless-firefox-tests .
-- docker run --rm --name run-e2e-headless-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-firefox-tests
+  ${DOCKER_USERNAME}/e2e-firefox-tests
+- docker build -f Dockerfile-e2e-headless-firefox-tests -t ${DOCKER_USERNAME}/e2e-headless-firefox-tests .
+- docker run --rm --name run-e2e-headless-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 ${DOCKER_USERNAME}/e2e-headless-firefox-tests
 after_success:
 - # 3) but these chrome builds are not... please help me create correct daggerok/e2e-jdk8-chrome-xvfb-base image..."
+- export SUFFIX="e2e-jdk8-chrome-xvfb-base"
+- DOCKER_BASE_IMAGE="${DOCKER_USERNAME}/${SUFFIX}"
 - >
   if [ "'true'" == "'${PUBLISH_BASE_DOCKER_IMAGE}'"  ]; then
-    SUFFIX="e2e-jdk8-chrome-xvfb-base"
-    DOCKER_IMAGE="${DOCKER_USERNAME}/${SUFFIX}"
-    docker build -f Dockerfile-${SUFFIX} -t ${DOCKER_IMAGE} .
+    docker build -f Dockerfile-${SUFFIX} -t "${DOCKER_BASE_IMAGE}" .
     echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-    docker push ${DOCKER_IMAGE}
+    docker push "${DOCKER_BASE_IMAGE}"
   fi;
-- docker pull daggerok/e2e-jdk8-chrome-xvfb-base
-- docker build -f Dockerfile-e2e-chrome-tests -t daggerok/e2e-chrome-tests .
+- docker pull "${DOCKER_BASE_IMAGE}"
+- docker build -f Dockerfile-e2e-chrome-tests -t ${DOCKER_USERNAME}/e2e-chrome-tests .
 - docker run --rm --name run-e2e-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2
   daggerok/e2e-chrome-tests
 - docker build -f Dockerfile-e2e-headless-chrome-tests -t daggerok/e2e-headless-chrome-tests .
 - docker run --rm --name run-e2e-headless-chrome-tests -v ~/.gradle:/home/e2e/.gradle
-  -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-chrome-tests
+  -v ~/.m2:/home/e2e/.m2 ${DOCKER_USERNAME}/e2e-headless-chrome-tests
 cache:
   directories:
   - "$HOME/.m2"
