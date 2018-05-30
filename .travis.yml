@@ -32,8 +32,8 @@ script:
 
 - bash gradlew -S clean chrome test
 - bash gradlew -S clean headless chrome test
-- bash gradlew -S clean firefox test
-- bash gradlew -S clean headless firefox test
+#- bash gradlew -S clean firefox test
+#- bash gradlew -S clean headless firefox test
 
 # 2) these builds using firefox / headless firefox in Dockerfile now is running well ...finally!"
 
