@@ -28,12 +28,15 @@ before_script:
 
 script:
 
-- echo "this build in Travis should pass!"
-- bash gradlew
+- echo "this build in Travis locally works as expected with bot firefox and chrome browsers!"
+- bash gradlew -S check chrome
+- bash gradlew -S check headless chrome
+- bash gradlew -S check firefox
+- bash gradlew -S check headless firefox
 
-- echo "this build using firefox in Dockerfile also is running well..."
-- docker build -t tests .
-- docker run --rm --name run-tests -v ~/.gradle:/root/.gradle -v ~/.m2:/root/.m2 tests
+- echo "this build using firefox / headless firefox in Dockerfile now is also is running well ...finally"
+- docker build -f Dockerfile-firefox -t tests .
+- docker run --rm --name run-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 tests
 
 cache:
   directories:
