@@ -2,7 +2,7 @@ FROM daggerok/e2e-jdk8-firefox-xvfb-base
 LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
 WORKDIR /home/e2e/selenide-in-docker
 CMD /bin/bash
-ENTRYPOINT sudo chown -R e2e:e2e ${HOME}/selenide-in-docker \
+ENTRYPOINT sudo chown -R e2e:e2e . \
         && . /usr/bin/start-xvfb \
         && ./gradlew -Si check firefox
 COPY . .

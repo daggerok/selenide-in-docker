@@ -44,7 +44,14 @@ sudo Xvfb -ac :99 -screen 0 1280x1024x16 & \n' \
 
 CMD /bin/bash
 
-### based image usage
+ARG JAVA_OPTS_ARGS='\
+ -Djava.net.preferIPv4Stack=true \
+ -XX:+UnlockExperimentalVMOptions \
+ -XX:+UseCGroupMemoryLimitForHeap \
+ -XshowSettings:vm'
+ENV JAVA_OPTS="${JAVA_OPTS} ${JAVA_OPTS_ARGS}"
+
+### firefox based image usage
 ## build base image first:
 #docker build -f Dockerfile-e2e-jdk8-firefox-xvfb-base -t daggerok/e2e-jdk8-firefox-xvfb-base .
 ## create e2e firefox test image based on previous:
