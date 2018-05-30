@@ -37,9 +37,7 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
  && sudo mv -f chromedriver /usr/bin/ \
  && rm -rf chromedriver*.zip google-chrome*.deb
 # firefox, driver
-RUN sudo echo "deb http://ppa.launchpad.net/mozillateam/firefox-next/ubuntu trusty main" \
-      > /etc/apt/sources.list.d//mozillateam-firefox-next-trusty.list \
- && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CE49EC21 \
+RUN sudo sudo add-apt-repository ppa:mozillateam/firefox-next \
  && sudo apt update -y \
  && sudo apt install -y firefox \
  && wget https://github.com/mozilla/geckodriver/releases/download/v${GECKO_DRV_VER}/geckodriver-v${GECKO_DRV_VER}-linux64.tar.gz \
@@ -48,25 +46,23 @@ RUN sudo echo "deb http://ppa.launchpad.net/mozillateam/firefox-next/ubuntu trus
  && sudo chmod +x /usr/bin/geckodriver
 # xvfb (1)
 RUN sudo apt-get install -y xvfb \
- && sudo touch /usr/bin/start-xvfb || true \
- && { \
-       sudo echo '#!/bin/bash'; \
-       sudo echo 'echo "try this Xvfb (1)"'; \
-       sudo echo 'Xvfb -ac :99 -screen 0 1280x1024x16 &'; \
-    } >> /usr/bin/start-xvfb \
- && sudo chmod +x /usr/bin/start-xvfb
+ && echo '#!/bin/bash \n\
+echo "try this Xvfb (1)" \n\
+sudo Xvfb -ac :99 -screen 0 1280x1024x16 & \n' \
+      >> ./start-xvfb \
+ && sudo chmod +x ./start-xvfb \
+ && sudo mv -f ./start-xvfb /usr/bin/start-xvfb \
+ && sudo cat /usr/bin/start-xvfb
 # xvfb (2)
 RUN sudo apt-get install -y xvfb \
- && sudo touch /usr/bin/start-xvfb || true \
- && { \
-       sudo echo '#!/bin/bash'; \
-       sudo echo 'echo "or try that Xvfb (2)"'; \
-       sudo echo '/usr/bin/Xvfb :10 -ac>>/tmp/Xvfb.out &'; \
-       sudo echo 'disown -ar'; \
-    } >> /usr/bin/start-xvfb \
- && sudo chmod +x /usr/bin/start-xvfb
+ && echo '#!/bin/bash \n\
+echo "or try that Xvfb (2)" \n\
+/usr/bin/Xvfb :10 -ac>>/tmp/Xvfb.out & \n' \
+      >> ./start-xvfb \
+ && sudo cat ./start-xvfb >> /usr/bin/start-xvfb \
+ && sudo cat /usr/bin/start-xvfb
 CMD /bin/bash
-ENTRYPOINT sudo /usr/bin/start-xvfb && ./gradlew -Si
-COPY . ./ib6-gdpr
+ENTRYPOINT sudo chown -R e2e:e2e ./ib6-gdpr/ && . /usr/bin/start-xvfb && cd ./ib6-gdpr/ && ./gradlew -Si
+COPY . /home/e2e/ib6-gdpr
 # docker build -t tests .
 # docker run --rm --name run-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 tests
