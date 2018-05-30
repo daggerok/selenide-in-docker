@@ -35,6 +35,7 @@ script:
 #- bash gradlew -S clean firefox test
 #- bash gradlew -S clean headless firefox test
 
+- ./gradlew clean
 # 2) these builds using firefox / headless firefox in Dockerfile now is running well ...finally!"
 
 - docker build -f Dockerfile-e2e-jdk8-firefox-xvfb-base -t daggerok/e2e-jdk8-firefox-xvfb-base .
