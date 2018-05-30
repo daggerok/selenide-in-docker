@@ -4,8 +4,7 @@ env:
   global:
   - TERM=dumb
   - PUBLISH_BASE_DOCKER_IMAGE=true
-  - secure: nv/bB3vuiTXfklTC50Nk0rRiC5wb9OZe2R/jQn/7YxEzdNr63BVRmyOoc/ol2+BJbh8ydZL0GoNqE8iyTu55JMUYiHI4Sg3eNThBb9KNt0lxUc8CKTPFx6Rc8Two0OYRgxw6yIJ6ibM3epk6cbTXFwbWbNAjhcGWQ3Fr56KQNEQTXaU+LblFe7vZdLbMQG+ETv5MBZ2VhShMut1y+v4TutWxofIU6IIDwlxqknJyRuQ8i4FDho8fhB3xaZHw7iChuc+AdyPMPJiTBpuaczLOAMqLsnwHGlMDtPGhHao5rzzj7MB+PNRMGnB7Ajykag7fzU5//rZbGzhfax9FAypTgIcmgBLhLbf7yw9MX4hmck0bt1uRuUwlhMOsKw+EDjlZF4xEZL0k3qYz+nUJ4EFVJeJsudzhfb+dNt3ymJCxC6NCpPA0pFxKe5xq3guJdFb05A3uB2BWIX/BJN8+AX6pOUIu88NCMANd2GbhCP/9fpBlz0lU49bCE+mJAzJn0ePcJqopnWljj4kz+vyctdP4Qf2QOY9UCLR/B8Jy2Vp/kONjNWZ/O1cit4+7qzEv+Va41w1tmDPo+SYv9Wqs2240U8Oh/pttfzyNOk5oBC1ZVUvDLmUbuL7Img4g4IHh9unekloU2YnOKgRZBRbIgCX5xD+svRUXoLgOyqWET5ZfvX8=
-  - secure: dWKnRsUeEPOqCC98SdLl7sSlwsGUiowtId/HzCLK/DwMxOBRXpEgaZJwh95OJeC/VLWmxCcLVP/uf8cXhM/AprMHUngcy/BmGB7O4uK3rJagPBxPPOpx2IIoozGPJZ1FkWkI72LkDiao8xsRFfdZfVmRln4sSbo6anMf5MquUuKrTGO2nOLm4M2Quir4q/cvU9Cg3IxKydzrOlmMAVVoiETL6fzTHapqNSiGVQHY/MllVlH4YLgvdYF18p5+p0a7bK7eJmnxN2f+4XRKcyVk0ihcM9iqr/rhyS1T+zPA0zRFtFsg3DNF8Zv0s8YSx9Fg2kRYfkqoOVbZi/DULZvq3RAnfPb6raVQQ9vtoKVHFN6ANbL/86rNAQHX/jBOAh+9GgqE8cLOP+dNgtG0YfasWypLCBY76dQufzmI+vwO7qVICXOH//wVh6C/OWe9oh4Z7FJ7+/yJq0QH7wXBW/oL+6C0a/uaZddCK7nzvxXZc4zyVS63PodT7z5Vf33q3Bg6wCo/+M/V5UClx6ivjheXAho9PcIVks0eYecNK6N1idtcMBBkxqF5prI7HYmb04P8gJ2LIcpz/d05tJeZNl2Rq3+IRKdIdKl0XZoXCrBz7eW88eOs8MLmRcZpcKw8ux5/G1sp188299ApBzQ+R50a2sW6hh0bRoMIbs7yffXrlnM=
+  - secure: YHqzqMYHcNPt9qDZxENsHmGeqJDuKJnznmmsIcl1X5j8ShRhMK/+mgHtP4776ISoWY30xa4a3KzYGDzxvWH1Oibq2BOHH21qi5cajwHQ7sL2zwfgxZEeXOszUojIcn0Yp5DEf3hbnqqPppFsmbz8Di++AOpzrIF/l9WZZwk66hY8Oqe8l5WcU5CjOEakebQ/7vaVZSKWqC+Z0TrFdir2dPPLXODVM4WGTSd8CI7n9hV5NZJcNe7n2VOJaEy7Tps6Y3hFEh3wfUFKbZh8AdP7qWri3xMr1vQFvMctkSzmRIawwSHIHaXciXG77Mt1Z64eIb+9eID6E5LNJ8uKUCpkpMz0xcW1vh7uuYac9WlchV67bg5N7/UMV50w2SyGVj8bwby3ruLqlTF6BQxKgutEioj6Ljtbbq9XV5zy0VfIqsvbYW3/Bd51vjX3qyE1fExtdJ8k3dhEW63f/FVjw/yNF8IDLd/0yxkL4yAw2rfLnntHkRC+cTHGYXqz/fuDRa0w9WVdPmU8rNy6Zo+G+g9eB3nLWqu5y5k34UvItbckucWb5QkGCWpSUlsuWlRAL51z4wleG0kZj4gJuTn4EkkJkgn7daEY0RxrN25HapB0/TVpFhMbFkDX9TN2+AFkyW8R4mDbpkOElE7jrFtX04ZD1CmcPOiIy2fulFvS1aIbmXs=
 language: java
 jdk: oraclejdk8
 addons:
@@ -33,36 +32,37 @@ script:
 - ./gradlew clean
 - # 2) these builds using firefox / headless firefox in Dockerfile now is running well ...finally!"
 - SUFFIX="e2e-jdk8-firefox-xvfb-base"
-- DOCKER_BASE_IMAGE="${DOCKER_USERNAME}/${SUFFIX}"
+- DOCKER_BASE_IMAGE="daggerok/${SUFFIX}"
 - |
   if [ "'true'" == "'${PUBLISH_BASE_DOCKER_IMAGE}'"  ]; then
     docker build -f Dockerfile-${SUFFIX} -t ${DOCKER_BASE_IMAGE} .
-    echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+    echo ${DOCKER_PASSWORD} | docker login -u daggerok --password-stdin
     docker push ${DOCKER_BASE_IMAGE}
   fi;
 - docker pull ${DOCKER_BASE_IMAGE}
-- docker build -f Dockerfile-e2e-firefox-tests -t ${DOCKER_USERNAME}/e2e-firefox-tests .
+- docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
 - docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2
-  ${DOCKER_USERNAME}/e2e-firefox-tests
-- docker build -f Dockerfile-e2e-headless-firefox-tests -t ${DOCKER_USERNAME}/e2e-headless-firefox-tests .
-- docker run --rm --name run-e2e-headless-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 ${DOCKER_USERNAME}/e2e-headless-firefox-tests
+  daggerok/e2e-firefox-tests
+- docker build -f Dockerfile-e2e-headless-firefox-tests -t daggerok/e2e-headless-firefox-tests .
+- docker run --rm --name run-e2e-headless-firefox-tests -v ~/.gradle:/home/e2e/.gradle
+  -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-firefox-tests
 after_success:
 - # 3) but these chrome builds are not... please help me create correct daggerok/e2e-jdk8-chrome-xvfb-base image..."
 - export SUFFIX="e2e-jdk8-chrome-xvfb-base"
-- DOCKER_BASE_IMAGE="${DOCKER_USERNAME}/${SUFFIX}"
-- >
+- DOCKER_BASE_IMAGE="daggerok/${SUFFIX}"
+- |
   if [ "'true'" == "'${PUBLISH_BASE_DOCKER_IMAGE}'"  ]; then
     docker build -f Dockerfile-${SUFFIX} -t "${DOCKER_BASE_IMAGE}" .
-    echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+    echo ${DOCKER_PASSWORD} | docker login -u daggerok --password-stdin
     docker push "${DOCKER_BASE_IMAGE}"
   fi;
 - docker pull "${DOCKER_BASE_IMAGE}"
-- docker build -f Dockerfile-e2e-chrome-tests -t ${DOCKER_USERNAME}/e2e-chrome-tests .
+- docker build -f Dockerfile-e2e-chrome-tests -t daggerok/e2e-chrome-tests .
 - docker run --rm --name run-e2e-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2
   daggerok/e2e-chrome-tests
 - docker build -f Dockerfile-e2e-headless-chrome-tests -t daggerok/e2e-headless-chrome-tests .
 - docker run --rm --name run-e2e-headless-chrome-tests -v ~/.gradle:/home/e2e/.gradle
-  -v ~/.m2:/home/e2e/.m2 ${DOCKER_USERNAME}/e2e-headless-chrome-tests
+  -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-chrome-tests
 cache:
   directories:
   - "$HOME/.m2"
