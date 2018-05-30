@@ -44,11 +44,9 @@ sudo Xvfb -ac :99 -screen 0 1280x1024x16 & \n' \
 
 CMD /bin/bash
 
-### usage:
-
-## build base image first
+### based image usage
+## build base image first:
 #docker build -f Dockerfile-e2e-jdk8-firefox-xvfb-base -t daggerok/e2e-jdk8-firefox-xvfb-base .
-
 ## create e2e firefox test image based on previous:
 # FROM daggerok/e2e-jdk8-firefox-xvfb-base
 # WORKDIR /home/e2e/selenide-in-docker
@@ -56,9 +54,3 @@ CMD /bin/bash
 #         && . /usr/bin/start-xvfb \
 #         && ./gradlew -Si check firefox
 # COPY . .
-
-## build image under test
-#docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
-
-## run selenide e2e tests using in firefox:
-# docker run --rm --name e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-firefox-tests
