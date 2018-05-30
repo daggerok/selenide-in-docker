@@ -58,7 +58,7 @@ ENV JAVA_OPTS="${JAVA_OPTS} ${JAVA_OPTS_ARGS}"
 WORKDIR /home/e2e/selenide-in-docker
 ENTRYPOINT sudo chown -R e2e:e2e . \
         && . /usr/bin/start-xvfb \
-        && ./gradlew -Si check chrome
+        && ./gradlew -Si chrome test
 COPY . .
 
 #usage
