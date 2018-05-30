@@ -60,12 +60,5 @@ apply from: "$rootDir/gradle/clean.gradle"
 apply from: "$rootDir/gradle/java.gradle"
 apply from: "$rootDir/gradle/kotlin.gradle"
 apply from: "$rootDir/gradle/spring-boot.gradle"
-apply from: "$rootDir/gradle/publishing.gradle"
-apply from: "$rootDir/gradle/jacoco.gradle"
 apply from: "$rootDir/gradle/junit.gradle"
 apply from: "$rootDir/gradle/selenide.gradle"
-apply from: "$rootDir/gradle/docker-compose.gradle"
-
-if (project.hasProperty('allure')) {
-  apply from: "$rootDir/gradle/allure.gradle"
-}
