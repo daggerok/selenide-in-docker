@@ -15,6 +15,7 @@ RUN echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-s
       oracle-java8-installer oracle-java8-set-default oracle-java8-unlimited-jce-policy
 RUN apt-get install -y \
       xvfb libappindicator1 fonts-liberation libxi6 libgconf-2-4 unzip \
+      libasound2 libnspr4 libnss3 libxss1 xdg-utils \
  && wget https://chromedriver.storage.googleapis.com/2.38/chromedriver_linux64.zip \
  && unzip chromedriver* \
  && mv -f chromedriver /usr/bin/ \
