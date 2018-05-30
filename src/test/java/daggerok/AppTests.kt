@@ -15,10 +15,7 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(
-//    webEnvironment = DEFINED_PORT
-    webEnvironment = RANDOM_PORT
-)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
 
   @Test
@@ -26,7 +23,6 @@ class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
 
     // unauthorized user mast be redirected to login page,
     // so sign in with credentials maksimko / passwordinko
-
     open("http://127.0.0.1:$port")
     sleep(3000)
     println(`$`("body").text())
@@ -48,18 +44,17 @@ class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
     `$`("body > span").shouldHave(exactText("Hello, Lol!"))
 
     // go to /logout, click on button, verify sign out success
-
     open("http://127.0.0.1:$port/logout")
 
-    `$`(cssSelector("form.form-signin"))
+    `$`("form.form-signin")
         .should(exist)
         .should(appears)
         .shouldHave(text("Are you sure you want to log out?"))
         .shouldHave(text("Log Out"))
-        .find(cssSelector("button[type='submit']"))
+        .find("button[type='submit']")
         .click()
 
-    `$`(cssSelector("div.alert.alert-success"))
+    `$`("div.alert.alert-success")
         .should(exist)
         .should(appear)
         .shouldHave(text("You have been signed ou"))
