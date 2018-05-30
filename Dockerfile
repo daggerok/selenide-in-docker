@@ -13,8 +13,11 @@ RUN echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-s
  && apt-get install -y \
       oracle-java8-installer oracle-java8-set-default oracle-java8-unlimited-jce-policy
 RUN apt-get install -y \
-      xvfb libappindicator1 fonts-liberation chromium-chromedriver libxi6 libgconf-2-4 \
- && ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+      xvfb libappindicator1 fonts-liberation chromium-chromedriver libxi6 libgconf-2-4 unzip \
+ && wget https://chromedriver.storage.googleapis.com/2.38/chromedriver_linux64.zip \
+ && unzip chromedriver* \
+ && mv -f chromedriver /usr/bin/ \
+ && rm -rf chromedriver*.zip
 RUN touch /usr/bin/docker-entrypoint \
  && { \
       echo '#!/bin/bash'; \
