@@ -56,8 +56,8 @@ ENV JAVA_OPTS="${JAVA_OPTS} ${JAVA_OPTS_ARGS}"
 #docker build -f Dockerfile-e2e-jdk8-firefox-xvfb-base -t daggerok/e2e-jdk8-firefox-xvfb-base .
 ## create e2e firefox test image based on previous:
 # FROM daggerok/e2e-jdk8-firefox-xvfb-base
-# WORKDIR /home/e2e/selenide-in-docker
-# ENTRYPOINT sudo chown -R e2e:e2e $(pwd) \
+# WORKDIR /home/e2e/project-directory
+# ENTRYPOINT sudo chown -R e2e:e2e . \
 #         && . /usr/bin/start-xvfb \
 #         && ./gradlew -Si check firefox
 # COPY . .

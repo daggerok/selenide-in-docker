@@ -10,5 +10,5 @@ COPY . .
 ### headless chrome client usage
 ## build image under test:
 #docker build -f Dockerfile-e2e-headless-chrome-tests -t daggerok/e2e-headless-chrome-tests .
-## run selenide e2e tests in chrome client:
+## run selenide e2e tests in headless chrome client:
 #docker run --rm --name run-e2e-headless-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-chrome-tests

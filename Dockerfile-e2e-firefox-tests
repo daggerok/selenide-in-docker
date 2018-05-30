@@ -11,4 +11,4 @@ COPY . .
 ## build image under test:
 #docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
 ## run selenide e2e tests in firefox client:
-# docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-firefox-tests
+#docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-firefox-tests
