@@ -1,0 +1,44 @@
+service:
+- docker
+
+env:
+  global:
+  - TERM=dumb
+
+language: java
+jdk: oraclejdk8
+
+addons:
+  apt:
+    update: true
+    packages:
+    - libappindicator1
+    - fonts-liberation
+    - wget
+    - bash
+    - docker-ce
+
+install: true
+before_script:
+- export CHROME_BIN=/usr/bin/google-chrome
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+- sudo dpkg -i google-chrome*.deb
+
+script:
+
+# 1) this build in Travis locally works as expected with bot firefox and chrome browsers!"
+
+- bash gradlew -S chrome test
+- bash gradlew -S headless chrome test
+
+# 2) but this chrome build is not... please help me create correct daggerok/e2e-jdk8-chrome-xvfb image..."
+
+- docker build -f Dockerfile -t daggerok/e2e-jdk8-chrome-xvfb .
+- docker run --rm --name run-e2e-jdk8-chrome-xvfb -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-jdk8-chrome-xvfb
+
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle
