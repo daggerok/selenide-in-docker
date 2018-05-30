@@ -1,0 +1,61 @@
+service:
+- docker
+
+env:
+  global:
+  - TERM=dumb
+
+language: java
+jdk: oraclejdk8
+
+addons:
+  apt:
+    update: true
+    packages:
+    - libappindicator1
+    - fonts-liberation
+    - wget
+    - bash
+    - docker-ce
+
+install: true
+before_script:
+- export CHROME_BIN=/usr/bin/google-chrome
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+- sudo dpkg -i google-chrome*.deb
+
+script:
+
+# 1) this build in Travis locally works as expected with bot firefox and chrome browsers!"
+
+- bash gradlew -S check chrome
+- bash gradlew -S check headless chrome
+- bash gradlew -S check firefox
+- bash gradlew -S check headless firefox
+
+# 2) these builds using firefox / headless firefox in Dockerfile now is running well ...finally!"
+
+- docker build -f Dockerfile-e2e-jdk8-firefox-xvfb-base -t daggerok/e2e-jdk8-firefox-xvfb-base .
+
+- docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
+- docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-firefox-tests
+
+- docker build -f Dockerfile-e2e-headless-firefox-tests -t daggerok/e2e-headless-firefox-tests .
+- docker run --rm --name run-e2e-headless-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-firefox-tests
+
+# 3) but these chrome builds are not... please help me create correct daggerok/e2e-jdk8-chrome-xvfb-base image..."
+
+- docker build -f Dockerfile-e2e-jdk8-chrome-xvfb-base -t daggerok/e2e-jdk8-firefox-xvfb-base .
+
+- docker build -f Dockerfile-e2e-chrome-tests -t daggerok/e2e-chrome-tests .
+- docker run --rm --name run-e2e-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-chrome-tests
+
+- docker build -f Dockerfile-e2e-headless-chrome-tests -t daggerok/e2e-headless-chrome-tests .
+- docker run --rm --name run-e2e-headless-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-chrome-tests
+
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.gradle
