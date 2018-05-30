@@ -30,8 +30,8 @@ script:
 - bash gradlew
 - echo "this build in Travis should pass!"
 - echo "but not that in docker..."
-- docker build -t selenide-in-docker .
-- docker run --rm --name tests -v ~/.gradle:/root/.gradle -v ~/.m2:/root/.m2 selenide-in-docker
+- docker build -t tests .
+- docker run --rm --name run-tests -v ~/.gradle:/root/.gradle -v ~/.m2:/root/.m2 tests
 
 cache:
   directories:
