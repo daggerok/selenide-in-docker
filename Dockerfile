@@ -25,8 +25,8 @@ RUN apt-get install -y \
 RUN touch /usr/bin/docker-entrypoint \
  && { \
       echo '#!/bin/bash'; \
-      echo 'sh -e /etc/init.d/xvfb start'; \
-      echo '#Xvfb -ac :99 -screen 0 1280x1024x16 &'; \
+      echo '#sh -e /etc/init.d/xvfb start'; \
+      echo 'Xvfb -ac :99 -screen 0 1280x1024x16 &'; \
     } > /usr/bin/docker-entrypoint \
  && chmod +x /usr/bin/docker-entrypoint
 CMD /bin/bash
