@@ -62,7 +62,7 @@ echo "or try that Xvfb (2)" \n\
  && sudo cat ./start-xvfb >> /usr/bin/start-xvfb \
  && sudo cat /usr/bin/start-xvfb
 CMD /bin/bash
-ENTRYPOINT sudo chown -R e2e:e2e ./ib6-gdpr/ && . /usr/bin/start-xvfb && cd ./ib6-gdpr/ && ./gradlew -Si
+ENTRYPOINT sudo chown -R e2e:e2e ./ib6-gdpr/ && . /usr/bin/start-xvfb && cd ./ib6-gdpr/ && ./gradlew -Si headless check
 COPY . /home/e2e/ib6-gdpr
 # docker build -t tests .
 # docker run --rm --name run-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 tests
