@@ -46,7 +46,7 @@ class IndexPage {
 
 @Configuration
 @EnableWebFluxSecurity
-@EnableReactiveMethodSecurity
+//@EnableReactiveMethodSecurity //useless here
 class SecurityConfig {
 
   @Bean fun encoder() = PasswordEncoderFactories.createDelegatingPasswordEncoder()!!
@@ -69,7 +69,8 @@ class SecurityConfig {
               .authorities("USER")
               .build()
         }
-        .toTypedArray())
+        .toTypedArray()
+    )
   }
 }
 
