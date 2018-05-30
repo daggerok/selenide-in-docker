@@ -1,0 +1,20 @@
+---
+spring:
+  profiles:
+    include:
+    - spring-boot
+---
+spring:
+  profiles:
+    active: spring-boot
+  output:
+    ansi:
+      enabled: always
+  mvc:
+    favicon:
+      enabled: false
+  thymeleaf:
+    reactive.max-chunk-size: 8192
+    check-template: false
+    mode: HTML
+---

@@ -1,0 +1,99 @@
+/**
+ * Selenide / drivers dependencies...
+ */
+dependencies {
+  testImplementation("com.codeborne:selenide:$selenideVersion") {
+    exclude module: "selenium-opera-driver"
+    exclude module: "selenium-safari-driver"
+    exclude module: "selenium-edge-driver"
+    exclude module: "selenium-ie-driver"
+    because "we don't wanna use any of these..."
+  }
+  testImplementation("com.codeborne:phantomjsdriver:$phantomjsDriverVersion")
+  ////these are must be included by selenide library as a transitive dependencies:
+  //testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumDriverVersion")
+  //testImplementation("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumDriverVersion")
+}
+
+static def findAllSelenideSystemProps() {
+  System.properties?.findAll {
+    it.key == "remote" ||
+        it.key.startsWith("selenide") ||
+        it.key.startsWith("webdriver")
+  } ?: [:]
+}
+
+final String selenideBrowser = "selenide.browser"
+//final String defaultBrowser = "phantomjs"
+//final String defaultBrowser = "firefox"
+final String defaultBrowser = "chrome"
+
+/**
+ * Specify defaults
+ *
+ * just for default `./gradlew build` execution
+ */
+test {
+  systemProperties = findAllSelenideSystemProps() + [
+      "webdriver.chrome.verboseLogging": "true",
+      "selenide.browser": System.getProperty(selenideBrowser, defaultBrowser),
+//  ] + (project.hasProperty("remote") ? [ "remote": "http://127.0.0.1:4444/wd/hub" ] : [:])
+//  ] + (project.hasProperty("remote") ? [ "remote": "http://127.0.0.1:4444/" ] : [:])
+  ]
+}
+
+/**
+ * Browser selector tasks: specify / select browser you wanna run within e2e selenide tests
+ *
+ * Usage:
+ *
+ * ./gradlew test chrome
+ * ./gradlew firefox check
+ */
+["firefox", "chrome", "phantomjs"].each { taskName ->
+  Task e2eTestBrowserSelectorTask = tasks.create(name: taskName) {
+    def systemProps = findAllSelenideSystemProps()
+    systemProps["$selenideBrowser"] = taskName
+
+    doFirst {
+      test {
+        systemProperties = systemProps
+      }
+    }
+  }
+  test.shouldRunAfter(e2eTestBrowserSelectorTask)
+}
+
+final String selenideHeadless = "selenide.headless"
+
+/**
+ * Force tests execution in headless mode.
+ *
+ * ./gradlew test headless chrome
+ */
+task headless {
+  def systemProps = findAllSelenideSystemProps()
+  systemProps["$selenideHeadless"] = true
+
+  doFirst {
+    test {
+      systemProperties = systemProps
+    }
+  }
+}
+
+/**
+ * Disabling headless mode even with default system configuration.
+ *
+ * ./gradlew test headful chrome
+ */
+task headful {
+  def systemProps = findAllSelenideSystemProps()
+  systemProps["$selenideHeadless"] = false
+
+  doFirst {
+    test {
+      systemProperties = systemProps
+    }
+  }
+}

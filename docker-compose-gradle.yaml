@@ -1,0 +1,58 @@
+## mkdir config
+## echo '{
+##           "firefox": {
+##               "default": "60.0",
+##               "versions": {
+##                   "60.0": {
+##                       "image": "selenoid/vnc:firefox_60.0",
+##                       "port": "4444",
+##                       "path": "/wd/hub"
+##                   }
+##               }
+##           }
+##       }' > ./config/browsers.json
+## docker pull selenoid/vnc:firefox_60.0
+## docker run --rm --name selenoid \
+##   -p 4444:4444 \
+##   -v /var/run/docker.sock:/var/run/docker.sock \
+##   -v $PWD/config:/etc/selenoid/:ro \
+##   selenoid/vnc:firefox_60.0
+##docker run --name selenoid -p 4444:4444 -v /var/run/docker.sock:/var/run/docker.sock -v $PWD/config:/etc/selenoid/:ro selenoid/vnc:chrome_66.0
+
+
+#version: '3'
+#services:
+#  selenoid:
+#    network_mode: bridge
+#    image: aerokube/selenoid:latest-release
+#    volumes:
+#      - "$PWD:/etc/selenoid"
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+#      - "$PWD:/opt/selenoid/video"
+#    environment:
+#      - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD
+#    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video"]
+#    ports:
+#      - "4444:4444"
+
+
+version: "2.1"
+
+services:
+
+  gradle-selenide-selenium-hub-app:
+    build:
+      context: .
+      dockerfile: gradle/Dockerfile
+    volumes: ["gradle-selenide-selenium-hub-app-data:/home/appuser"]
+    ports: ["8080:8080"]
+    networks: [backing-services]
+    #restart: unless-stopped
+    #mem_limit: 786432000 # container limit: 700Mb (700 * 1024 * 1024)
+
+volumes:
+  gradle-selenide-selenium-hub-app-data: {}
+
+networks:
+  backing-services:
+    driver: bridge
