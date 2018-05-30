@@ -3,12 +3,19 @@ LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docke
 WORKDIR /home/e2e/selenide-in-docker
 CMD /bin/bash
 ENTRYPOINT sudo chown -R e2e:e2e . \
-        && . /usr/bin/start-xvfb \
-        && ./gradlew -Si check chrome
+             && . /usr/bin/start-xvfb \
+             && ./gradlew -Si check chrome
 COPY . .
 
 ## chrome client usage - build image under test:
 # docker build -f Dockerfile-e2e-chrome-tests -t daggerok/e2e-chrome-tests .
 
 ## run selenide e2e tests in chrome client:
+
+# docker run --rm --name run-e2e-chrome-tests daggerok/e2e-chrome-tests
 # docker run --rm --name run-e2e-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-chrome-tests
+
+# docker run --rm --name run-e2e-chrome-tests \
+#   -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1 \
+#   -v ~/.m2/repository:/home/e2e/.m2/repository \
+#   daggerok/e2e-chrome-tests

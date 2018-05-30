@@ -3,8 +3,8 @@ LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docke
 WORKDIR /home/e2e/selenide-in-docker
 CMD /bin/bash
 ENTRYPOINT sudo chown -R e2e:e2e . \
-        && . /usr/bin/start-xvfb \
-        && ./gradlew -Si check firefox
+             && . /usr/bin/start-xvfb \
+             && ./gradlew -Si headless firefox test
 COPY . .
 
 ## headless firefox client usage - build image under test:
@@ -13,3 +13,9 @@ COPY . .
 ## run selenide e2e tests in headless firefox client:
 # docker run --rm --name run-e2e-headless-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-firefox-tests
 # docker run --rm --name run-e2e-headless-firefox-tests daggerok/e2e-headless-firefox-tests
+
+# mkdir -p ~/.gradle/caches/modules-2/files-2.1 ~/.m2/repository
+# docker run --rm --name run-e2e-headless-firefox-tests \
+#   -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1 \
+#   -v ~/.m2/repository:/home/e2e/.m2/repository \
+#   daggerok/e2e-headless-firefox-tests

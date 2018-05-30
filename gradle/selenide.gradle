@@ -25,7 +25,6 @@ static def findAllSelenideSystemProps() {
 
 final String selenideBrowser = "selenide.browser"
 //final String defaultBrowser = "phantomjs"
-//final String defaultBrowser = "firefox"
 final String defaultBrowser = "chrome"
 
 /**
@@ -37,9 +36,7 @@ test {
   systemProperties = findAllSelenideSystemProps() + [
       "webdriver.chrome.verboseLogging": "true",
       "selenide.browser": System.getProperty(selenideBrowser, defaultBrowser),
-//  ] + (project.hasProperty("remote") ? [ "remote": "http://127.0.0.1:4444/wd/hub" ] : [:])
-//  ] + (project.hasProperty("remote") ? [ "remote": "http://127.0.0.1:4444/" ] : [:])
-  ]
+  ] + project.hasProperty("remote") ? [ "remote": "http://127.0.0.1:4444/wd/hub" ] : [:]
 }
 
 /**
@@ -97,3 +94,5 @@ task headful {
     }
   }
 }
+
+test.shouldRunAfter headless, headful

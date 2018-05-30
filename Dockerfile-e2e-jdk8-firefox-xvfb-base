@@ -58,6 +58,6 @@ ENV JAVA_OPTS="${JAVA_OPTS} ${JAVA_OPTS_ARGS}"
 # FROM daggerok/e2e-jdk8-firefox-xvfb-base
 # WORKDIR /home/e2e/project-directory
 # ENTRYPOINT sudo chown -R e2e:e2e . \
-#         && . /usr/bin/start-xvfb \
-#         && ./gradlew -Si check firefox
+#              && . /usr/bin/start-xvfb \
+#              && ./gradlew -Si test firefox
 # COPY . .

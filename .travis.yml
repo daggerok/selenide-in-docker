@@ -40,12 +40,20 @@ script:
     docker push ${DOCKER_BASE_IMAGE}
   fi;
 - docker pull ${DOCKER_BASE_IMAGE}
+- #
 - docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests .
-- #docker run --rm --name run-e2e-firefox-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2 daggerok/e2e-firefox-tests
-- docker run --rm --name run-e2e-firefox-tests daggerok/e2e-firefox-tests
-- docker build -f Dockerfile-e2e-headless-firefox-tests -t daggerok/e2e-headless-firefox-tests .
-- docker run --rm --name run-e2e-headless-firefox-tests -v ~/.gradle:/home/e2e/.gradle
-  -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-firefox-tests
+- #docker run --rm --name run-e2e-firefox-tests daggerok/e2e-firefox-tests
+- mkdir -p ~/.gradle/caches/modules-2/files-2.1 ~/.m2/repository
+- docker run --rm --name run-e2e-firefox-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
+  daggerok/e2e-firefox-tests
+- #
+  - docker build -f Dockerfile-e2e-headless-firefox-tests -t daggerok/e2e-headless-firefox-tests .
+- docker run --rm --name run-e2e-headless-firefox-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
+  daggerok/e2e-headless-firefox-tests
 after_success:
 - # 3) but these chrome builds are not... please help me create correct daggerok/e2e-jdk8-chrome-xvfb-base image..."
 - export SUFFIX="e2e-jdk8-chrome-xvfb-base"
@@ -57,12 +65,19 @@ after_success:
     docker push "${DOCKER_BASE_IMAGE}"
   fi;
 - docker pull "${DOCKER_BASE_IMAGE}"
+- #
 - docker build -f Dockerfile-e2e-chrome-tests -t daggerok/e2e-chrome-tests .
-- docker run --rm --name run-e2e-chrome-tests -v ~/.gradle:/home/e2e/.gradle -v ~/.m2:/home/e2e/.m2
+- #
+- docker run --rm --name run-e2e-chrome-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
   daggerok/e2e-chrome-tests
+- #
 - docker build -f Dockerfile-e2e-headless-chrome-tests -t daggerok/e2e-headless-chrome-tests .
-- docker run --rm --name run-e2e-headless-chrome-tests -v ~/.gradle:/home/e2e/.gradle
-  -v ~/.m2:/home/e2e/.m2 daggerok/e2e-headless-chrome-tests
+- docker run --rm --name run-e2e-headless-chrome-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
+  daggerok/e2e-headless-chrome-tests
 cache:
   directories:
   - "$HOME/.m2"
