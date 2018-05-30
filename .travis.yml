@@ -27,9 +27,11 @@ before_script:
 - sudo dpkg -i google-chrome*.deb
 
 script:
-- bash gradlew
+
 - echo "this build in Travis should pass!"
-- echo "but not that one from docker..."
+- bash gradlew
+
+- echo "but one (using Dockerfile) is not..."
 - docker build -t tests .
 - docker run --rm --name run-tests -v ~/.gradle:/root/.gradle -v ~/.m2:/root/.m2 tests
 

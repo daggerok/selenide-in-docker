@@ -16,12 +16,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
-    webEnvironment = DEFINED_PORT
-//    webEnvironment = RANDOM_PORT
+//    webEnvironment = DEFINED_PORT
+    webEnvironment = RANDOM_PORT
 )
-class `What can I say? Kotlin is awesome!`(/*@LocalServerPort val port: Int*/) {
-
-  val port = 8080
+class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
 
   @Test
   fun `test everything in single success flow`() {
