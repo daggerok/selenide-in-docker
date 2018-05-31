@@ -24,7 +24,7 @@ class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
     // unauthorized user mast be redirected to login page,
     // so sign in with credentials maksimko / passwordinko
     open("http://127.0.0.1:$port")
-    sleep(3000)
+    sleep(1000)
     println(`$`("body").text())
     val form = `$`(".form-signin")
     form.find("#username").value = "maksimko"
@@ -33,19 +33,26 @@ class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
 
     // assert default greeting message
     open("http://127.0.0.1:$port/")
+    sleep(1000)
+    println(`$`("body").text())
     `$`("body").shouldHave(text("Hello, My friend!"))
 
     // verify name from query params
     open("http://127.0.0.1:$port/?name=selenidko")
+    sleep(1000)
+    println(`$`("body").text())
     `$`("span").shouldHave(exactText("Hello, Selenidko!"))
 
     // and lastly verify greeting according to name from path
     open("http://127.0.0.1:$port/lol")
+    sleep(1000)
+    println(`$`("body").text())
     `$`("body > span").shouldHave(exactText("Hello, Lol!"))
 
     // go to /logout, click on button, verify sign out success
     open("http://127.0.0.1:$port/logout")
-
+    sleep(1000)
+    println(`$`("body").text())
     `$`("form.form-signin")
         .should(exist)
         .should(appears)
