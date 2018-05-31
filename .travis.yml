@@ -30,8 +30,8 @@ script:
 - # 1) this build in Travis locally works as expected with bot firefox and chrome browsers!"
 - ./gradlew -Si clean test chrome
 - ./gradlew -Si clean test headless chrome
-- ./gradlew -Si clean check firefox
-- ./gradlew -Si clean check headless firefox
+- #./gradlew -Si clean check firefox
+- #./gradlew -Si clean check headless firefox
 - ./gradlew -Si clean check phantomjs
 - ./gradlew -Si clean check headful phantomjs
 - ./gradlew clean
