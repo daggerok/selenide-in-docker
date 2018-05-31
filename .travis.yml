@@ -97,6 +97,7 @@ after_success:
   daggerok/e2e-headless-chrome-tests:latest
 before_cache:
 - sudo rm -rf ~/.docker/config*
+- sudo rm -rf ~/.gradle/wrapper
 - sudo rm -rf ~/.gradle/caches/4.7/fileHashes/fileHashes.bin
 - sudo rm -rf ~/.gradle/caches/4.7/fileHashes/*.lock
 - sudo rm -rf ~/.gradle/caches/modules-2/*.lock
