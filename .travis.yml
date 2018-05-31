@@ -28,8 +28,8 @@ before_script:
 
 script:
 - # 1) this build in Travis locally works as expected with bot firefox and chrome browsers!"
+- ./gradlew -S clean test headless chrome >/dev/null
 - ./gradlew -S clean test chrome
-- ./gradlew -S clean test headless chrome
 - #./gradlew -Si clean check firefox
 - #./gradlew -Si clean check headless firefox
 - ./gradlew -S clean check phantomjs
@@ -42,7 +42,7 @@ script:
 - DOCKER_BASE_IMAGE="daggerok/${SUFFIX}:latest"
 - |
   if [ "'true'" == "'${BUILD_BASE_DOCKER_IMAGE}'"  ]; then
-    docker build -f Dockerfile-${SUFFIX} -t ${DOCKER_BASE_IMAGE} .
+    docker build -f Dockerfile-${SUFFIX} -t ${DOCKER_BASE_IMAGE} . >/dev/null
   fi;
 - |
   if [ "'true'" == "'${PUSH_BASE_DOCKER_IMAGE}'"  ]; then
@@ -52,7 +52,7 @@ script:
 - |
   if [ "'true'" == "'${PULL_BASE_DOCKER_IMAGE}'"  ]; then
     echo ${DOCKER_PASSWORD} | docker login -u daggerok --password-stdin
-    docker pull ${DOCKER_BASE_IMAGE}
+    docker pull ${DOCKER_BASE_IMAGE} >/dev/null
   fi;
 
 - docker build -f Dockerfile-e2e-firefox-tests -t daggerok/e2e-firefox-tests:latest .
@@ -76,7 +76,7 @@ after_success:
 - DOCKER_BASE_IMAGE="daggerok/${SUFFIX}:latest"
 - |
   if [ "'true'" == "'${BUILD_BASE_DOCKER_IMAGE}'"  ]; then
-    docker build -f Dockerfile-${SUFFIX} -t "${DOCKER_BASE_IMAGE}" .
+    docker build -f Dockerfile-${SUFFIX} -t "${DOCKER_BASE_IMAGE}" . >/dev/null
   fi;
 - |
   if [ "'true'" == "'${PUSH_BASE_DOCKER_IMAGE}'"  ]; then
@@ -84,7 +84,7 @@ after_success:
   fi;
 - |
   if [ "'true'" == "'${PULL_BASE_DOCKER_IMAGE}'"  ]; then
-    docker pull "${DOCKER_BASE_IMAGE}"
+    docker pull "${DOCKER_BASE_IMAGE}" >/dev/null
   fi;
 
 - docker build -f Dockerfile-e2e-chrome-tests -t daggerok/e2e-chrome-tests:latest .
