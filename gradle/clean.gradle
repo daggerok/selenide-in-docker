@@ -1,10 +1,8 @@
-import org.apache.tools.ant.taskdefs.condition.Os
-
 allprojects {
   apply plugin: "base"
 
   clean.doFirst {
-    Os.isFamily(Os.FAMILY_WINDOWS) ? [] : [project.file(".gradle")] + [
+    [
         project.buildDir,
         project.file("out"),
         project.file("bin"),
@@ -17,10 +15,9 @@ allprojects {
         project.file("$rootDir/dist"),
         project.file("allure-report"),
         project.file("allure-results"),
-        //project.file("ajcore.*.txt"),
-        //project.fileTree(projectDir) { include "ajcore.*.txt" },
         project.file("$rootDir/src/main/resources/public/docs"),
     ].each { delete it }
+
     // rm -rf $(find . -name 'ajcore.*.txt')
     delete fileTree(rootDir).matching {
       include "**/ajcore.*.txt"
