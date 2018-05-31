@@ -23,8 +23,8 @@ before_script:
 - export CHROME_BIN=/usr/bin/google-chrome
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-- sudo dpkg -i google-chrome*.deb
+- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb >/dev/null
+- sudo dpkg -i google-chrome*.deb >/dev/null
 
 script:
 - # 1) this build in Travis locally works as expected with bot firefox and chrome browsers!"
