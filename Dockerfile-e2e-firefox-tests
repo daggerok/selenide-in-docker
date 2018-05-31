@@ -4,6 +4,7 @@ WORKDIR /home/e2e/selenide-in-docker
 CMD /bin/bash
 ENTRYPOINT sudo chown -R e2e:e2e . \
              && . /usr/bin/start-xvfb \
+             && sudo rm -rf /home/e2e/.gradle/wrapper/ \
              && ./gradlew -Si check firefox
 COPY . .
 
