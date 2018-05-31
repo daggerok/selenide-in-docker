@@ -2,10 +2,10 @@ FROM daggerok/e2e-jdk8-firefox-xvfb-base
 LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
 WORKDIR /home/e2e/selenide-in-docker
 CMD /bin/bash
-ENTRYPOINT sudo chown -R e2e:e2e ~/ \
-             && sudo rm -rf ~/.gradle/wrapper/ \
+ENTRYPOINT sudo chown -R e2e:e2e /home/e2e \
+             && sudo rm -rf /home/e2e/.gradle/wrapper/ \
              && . /usr/bin/start-xvfb \
-             && ./gradlew -Si headless firefox test
+             && ./gradlew -S headless firefox test
 COPY . .
 
 ## headless firefox client usage - build image under test:

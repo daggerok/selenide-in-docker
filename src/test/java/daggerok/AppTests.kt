@@ -38,7 +38,6 @@ class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
     form.find("#username").value = "maksimko"
     form.find("#password").value = "passwordinko"
     form.find("button[type=submit]").click()
-    "body".slowPoke()
 
     // assert default greeting message
     open("http://127.0.0.1:$port/")

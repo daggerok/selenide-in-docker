@@ -5,7 +5,7 @@ CMD /bin/bash
 ENTRYPOINT sudo chown -R e2e:e2e ~/ \
              && sudo rm -rf ~/.gradle/wrapper/ \
              && . /usr/bin/start-xvfb \
-             && ./gradlew -Si check firefox
+             && ./gradlew -S check firefox
 COPY . .
 
 ## firefox client usage - build image under test:
