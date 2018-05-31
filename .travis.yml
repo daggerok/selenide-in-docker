@@ -32,7 +32,6 @@ script:
 - ./gradlew -S clean test chrome
 - #./gradlew -Si clean check firefox
 - #./gradlew -Si clean check headless firefox
-- ./gradlew -S clean check phantomjs
 - ./gradlew -S clean check headful phantomjs
 - ./gradlew clean
 - ./gradlew --stop
