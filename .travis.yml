@@ -27,10 +27,10 @@ before_script:
 - sudo dpkg -i google-chrome*.deb
 script:
 - # 1) this build in Travis locally works as expected with bot firefox and chrome browsers!"
-- bash gradlew -S clean chrome test
-- bash gradlew -S clean headless chrome test
-- #bash gradlew -S clean firefox test
-- #bash gradlew -S clean headless firefox test
+- bash gradlew -Si clean chrome test
+- bash gradlew -Si clean headless chrome test
+- #bash gradlew -Si clean firefox test
+- #bash gradlew -Si clean headless firefox test
 - ./gradlew clean
 - ./gradlew --stop
 
