@@ -9,10 +9,10 @@ dependencies {
     exclude module: "selenium-ie-driver"
     because "we don't wanna use any of these..."
   }
-  testImplementation("com.codeborne:phantomjsdriver:$phantomjsDriverVersion")
-  ////these are must be included by selenide library as a transitive dependencies:
+  ////and these are hopefully comes with selenide library as a transitive dependencies:
   //testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumDriverVersion")
   //testImplementation("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumDriverVersion")
+  testImplementation("com.codeborne:phantomjsdriver:$phantomjsDriverVersion")
 }
 
 static def findAllSelenideSystemProps() {
@@ -27,11 +27,6 @@ final String selenideBrowser = "selenide.browser"
 //final String defaultBrowser = "phantomjs"
 final String defaultBrowser = "chrome"
 
-/**
- * Specify defaults
- *
- * just for default `./gradlew build` execution
- */
 test {
   systemProperties = findAllSelenideSystemProps() + [
       "webdriver.chrome.verboseLogging": "true",
@@ -41,14 +36,6 @@ test {
   )
 }
 
-/**
- * Browser selector tasks: specify / select browser you wanna run within e2e selenide tests
- *
- * Usage:
- *
- * ./gradlew test chrome
- * ./gradlew firefox check
- */
 ["firefox", "chrome", "phantomjs"].each { taskName ->
   Task e2eTestBrowserSelectorTask = tasks.create(name: taskName) {
     def systemProps = findAllSelenideSystemProps()
@@ -65,11 +52,6 @@ test {
 
 final String selenideHeadless = "selenide.headless"
 
-/**
- * Force tests execution in headless mode.
- *
- * ./gradlew test headless chrome
- */
 task headless {
   def systemProps = findAllSelenideSystemProps()
   systemProps["$selenideHeadless"] = true
@@ -81,11 +63,6 @@ task headless {
   }
 }
 
-/**
- * Disabling headless mode even with default system configuration.
- *
- * ./gradlew test headful chrome
- */
 task headful {
   def systemProps = findAllSelenideSystemProps()
   systemProps["$selenideHeadless"] = false
