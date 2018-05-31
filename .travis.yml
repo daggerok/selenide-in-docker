@@ -33,7 +33,7 @@ script:
 - #bash gradlew -S clean headless firefox test
 - ./gradlew clean
 - # 2) these builds using firefox / headless firefox in Dockerfile now is running well ...finally!"
-- SUFFIX="e2e-jdk8-firefox-xvfb-base"
+- SUFFIX="e2e-jdk8-firefox-xvfb-base:latest"
 - DOCKER_BASE_IMAGE="daggerok/${SUFFIX}"
 - |
   if [ "'true'" == "'${BUILD_BASE_DOCKER_IMAGE}'"  ]; then
@@ -64,7 +64,7 @@ script:
   daggerok/e2e-headless-firefox-tests
 after_success:
 - # 3) but these chrome builds are not... please help me create correct daggerok/e2e-jdk8-chrome-xvfb-base image..."
-- export SUFFIX="e2e-jdk8-chrome-xvfb-base"
+- export SUFFIX="e2e-jdk8-chrome-xvfb-base:latest"
 - DOCKER_BASE_IMAGE="daggerok/${SUFFIX}"
 - |
   if [ "'true'" == "'${BUILD_BASE_DOCKER_IMAGE}'"  ]; then

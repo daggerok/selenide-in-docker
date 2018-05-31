@@ -2,7 +2,7 @@ FROM daggerok/e2e-jdk8-chrome-xvfb-base
 LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
 WORKDIR /home/e2e/selenide-in-docker
 CMD /bin/bash
-ENTRYPOINT sudo chown -R e2e:e2e . \
+ENTRYPOINT sudo chown -R e2e:e2e /home/e2e/selenide-in-docker /home/e2e/.gradle /home/e2e/.m2 \
              && . /usr/bin/start-xvfb \
              && sudo rm -rf /home/e2e/.gradle/wrapper/ \
              && ./gradlew -Si check headless chrome
