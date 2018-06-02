@@ -1,0 +1,110 @@
+service:
+- docker
+env:
+  global:
+  - TERM=dumb
+  - BUILD_BASE_DOCKER_IMAGE=true
+  - PUSH_BASE_DOCKER_IMAGE=true
+  - PULL_BASE_DOCKER_IMAGE=true
+  - secure: YHqzqMYHcNPt9qDZxENsHmGeqJDuKJnznmmsIcl1X5j8ShRhMK/+mgHtP4776ISoWY30xa4a3KzYGDzxvWH1Oibq2BOHH21qi5cajwHQ7sL2zwfgxZEeXOszUojIcn0Yp5DEf3hbnqqPppFsmbz8Di++AOpzrIF/l9WZZwk66hY8Oqe8l5WcU5CjOEakebQ/7vaVZSKWqC+Z0TrFdir2dPPLXODVM4WGTSd8CI7n9hV5NZJcNe7n2VOJaEy7Tps6Y3hFEh3wfUFKbZh8AdP7qWri3xMr1vQFvMctkSzmRIawwSHIHaXciXG77Mt1Z64eIb+9eID6E5LNJ8uKUCpkpMz0xcW1vh7uuYac9WlchV67bg5N7/UMV50w2SyGVj8bwby3ruLqlTF6BQxKgutEioj6Ljtbbq9XV5zy0VfIqsvbYW3/Bd51vjX3qyE1fExtdJ8k3dhEW63f/FVjw/yNF8IDLd/0yxkL4yAw2rfLnntHkRC+cTHGYXqz/fuDRa0w9WVdPmU8rNy6Zo+G+g9eB3nLWqu5y5k34UvItbckucWb5QkGCWpSUlsuWlRAL51z4wleG0kZj4gJuTn4EkkJkgn7daEY0RxrN25HapB0/TVpFhMbFkDX9TN2+AFkyW8R4mDbpkOElE7jrFtX04ZD1CmcPOiIy2fulFvS1aIbmXs=
+language: java
+jdk: oraclejdk8
+addons:
+  apt:
+    update: true
+    packages:
+    - libappindicator1
+    - fonts-liberation
+    - wget
+    - bash
+    - docker-ce
+install: true
+before_script:
+- export CHROME_BIN=/usr/bin/google-chrome
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb >/dev/null
+- sudo dpkg -i google-chrome*.deb >/dev/null
+
+script:
+- # 1) this build in Travis locally works as expected with bot firefox and chrome browsers!"
+- ./gradlew -S clean test headless chrome >/dev/null
+- ./gradlew -S clean test chrome
+- #./gradlew -Si clean check firefox
+- #./gradlew -Si clean check headless firefox
+- ./gradlew -S clean check headful phantomjs
+- ./gradlew clean
+- ./gradlew --stop
+
+- # 2) these builds using firefox / headless firefox in Dockerfile now is running well ...finally!"
+- SUFFIX="e2e-jdk8-firefox-xvfb-base"
+- DOCKER_BASE_IMAGE="daggerok/${SUFFIX}:latest"
+- |
+  if [ "'true'" == "'${BUILD_BASE_DOCKER_IMAGE}'"  ]; then
+    docker build  --no-cache --force-rm -f Dockerfile-${SUFFIX} -t ${DOCKER_BASE_IMAGE} . >/dev/null
+  fi;
+- |
+  if [ "'true'" == "'${PUSH_BASE_DOCKER_IMAGE}'"  ]; then
+    echo ${DOCKER_PASSWORD} | docker login -u daggerok --password-stdin
+    docker push ${DOCKER_BASE_IMAGE}
+  fi;
+- |
+  if [ "'true'" == "'${PULL_BASE_DOCKER_IMAGE}'"  ]; then
+    echo ${DOCKER_PASSWORD} | docker login -u daggerok --password-stdin
+    docker pull ${DOCKER_BASE_IMAGE} >/dev/null
+  fi;
+
+- docker build --no-cache --force-rm
+  -f Dockerfile-e2e-firefox-tests
+  -t daggerok/e2e-firefox-tests:latest .
+
+- #docker run --rm --name run-e2e-firefox-tests daggerok/e2e-firefox-tests:latest
+- mkdir -p ~/.gradle/caches/modules-2/files-2.1 ~/.m2/repository
+- docker run --rm --name run-e2e-firefox-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
+  daggerok/e2e-firefox-tests
+
+- docker build  --no-cache --force-rm
+  -f Dockerfile-e2e-headless-firefox-tests
+  -t daggerok/e2e-headless-firefox-tests:latest .
+
+- docker run --rm --name run-e2e-headless-firefox-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
+  daggerok/e2e-headless-firefox-tests:latest
+
+after_success:
+- # 3) but these chrome builds are not... please help me create correct daggerok/e2e-jdk8-chrome-xvfb-base image..."
+- export SUFFIX="e2e-jdk8-chrome-xvfb-base"
+- DOCKER_BASE_IMAGE="daggerok/${SUFFIX}:latest"
+- |
+  if [ "'true'" == "'${BUILD_BASE_DOCKER_IMAGE}'"  ]; then
+    docker build --no-cache --force-rm -f Dockerfile-${SUFFIX} -t "${DOCKER_BASE_IMAGE}" . >/dev/null
+  fi;
+- |
+  if [ "'true'" == "'${PUSH_BASE_DOCKER_IMAGE}'"  ]; then
+    docker push "${DOCKER_BASE_IMAGE}"
+  fi;
+- |
+  if [ "'true'" == "'${PULL_BASE_DOCKER_IMAGE}'"  ]; then
+    docker pull "${DOCKER_BASE_IMAGE}" >/dev/null
+  fi;
+
+- docker build --no-cache --force-rm
+  -f Dockerfile-e2e-chrome-tests
+  -t daggerok/e2e-chrome-tests:latest .
+
+- docker run --rm --name run-e2e-chrome-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
+  daggerok/e2e-chrome-tests:latest
+
+- docker build --no-cache --force-rm
+  -f Dockerfile-e2e-headless-chrome-tests
+  -t daggerok/e2e-headless-chrome-tests:latest .
+
+- docker run --rm --name run-e2e-headless-chrome-tests
+  -v ~/.m2/repository:/home/e2e/.m2/repository
+  -v ~/.gradle/caches/modules-2/files-2.1:/home/e2e/.gradle/caches/modules-2/files-2.1
+  daggerok/e2e-headless-chrome-tests:latest
