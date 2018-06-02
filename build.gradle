@@ -52,7 +52,7 @@ plugins {
 
 task wrapper(type: Wrapper) {
   gradleVersion = "4.7"
-  distributionType = "ALL"
+  distributionType = "BIN"
 }
 
 apply from: "$rootDir/gradle/ide.gradle"
