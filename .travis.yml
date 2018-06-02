@@ -30,6 +30,8 @@ script:
 - ./gradlew --stop
 
 - docker build --no-cache --force-rm -t e2e-tests .
+- docker run --rm --name run-e2e-tests e2e-tests
+
 - mkdir -p ~/.gradle/caches/modules-2/files-2.1 ~/.m2/repository
 - docker run --rm --name run-e2e-tests
   -v ~/.m2/repository:/home/e2e/.m2/repository
