@@ -5,3 +5,5 @@
 support@travis-ci.com-*
 Dockerfile*
 README.adoc
+/build/
+/out/
