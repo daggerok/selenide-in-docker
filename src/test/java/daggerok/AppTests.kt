@@ -2,18 +2,23 @@ package daggerok
 
 import com.codeborne.selenide.Condition.*
 import com.codeborne.selenide.Selenide.*
-import com.codeborne.selenide.SelenideElement
-import com.codeborne.selenide.WebDriverRunner.url
+import com.codeborne.selenide.WebDriverRunner
+import org.junit.Rule
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.openqa.selenium.By
-import org.openqa.selenium.By.cssSelector
-import org.openqa.selenium.By.tagName
+import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.remote.DesiredCapabilities
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.testcontainers.containers.BrowserWebDriverContainer
+import org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL
+import java.io.File
+
+class KGenericContainer() : BrowserWebDriverContainer<KGenericContainer>()
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -27,10 +32,26 @@ class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
     sleep(1000)
   }
 
+/*
+  @Rule
+  val chrome: KGenericContainer = KGenericContainer()
+      .withDesiredCapabilities(DesiredCapabilities.chrome())
+      .withRecordingMode(RECORD_ALL, File("build"))
+
+  @BeforeEach
+  fun setUp() {
+    val driver = chrome.webDriver
+    WebDriverRunner.setWebDriver(driver)
+  }
+
+  @AfterEach
+  fun tearDown() {
+    WebDriverRunner.closeWebDriver()
+  }
+*/
+
   @Test
   fun `test everything in single success flow`() {
-
-
 
     // unauthorized user mast be redirected to login page,
     // so sign in with credentials maksimko / passwordinko

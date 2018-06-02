@@ -3,6 +3,8 @@
  */
 dependencies {
   testImplementation("org.testcontainers:selenium:1.7.3")
+  testImplementation("org.testcontainers:testcontainers:1.7.3")
+  testImplementation("org.seleniumhq.selenium:selenium-remote-driver")
   testImplementation("com.codeborne:selenide:$selenideVersion") {
     exclude module: "selenium-opera-driver"
     exclude module: "selenium-safari-driver"
