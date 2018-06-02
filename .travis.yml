@@ -23,9 +23,9 @@ before_script:
 - sudo dpkg -i google-chrome*.deb >/dev/null
 
 script:
-- ./gradlew -S clean test headless chrome >/dev/null
+#- ./gradlew -S clean test headless chrome >/dev/null
 - ./gradlew -S clean test chrome
-- ./gradlew -S clean check headful phantomjs
+#- ./gradlew -S clean check headful phantomjs
 - ./gradlew clean
 - ./gradlew --stop
 

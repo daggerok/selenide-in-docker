@@ -2,7 +2,7 @@ FROM daggerok/e2e-ubuntu-jdk8-xvfb
 LABEL MAINTAINER='Maksim Kostromin https://github.com/daggerok/selenide-in-docker'
 USER e2e
 RUN echo '#!/bin/bash \n\
-\#we need this huck, because we wanna reuse existing ~/.m2 and ~/.gradle folders... \n\
+\#we need this hack, because we wanna reuse existing ~/.m2 and ~/.gradle folders... \n\
 sudo mkdir -p mkdir -p ~/.gradle/caches/modules-2/files-2.1 ~/.m2/repository \n\
 sudo chown -R e2e:e2e ~/.gradle ~/.m2 \n\
 sudo exec runuser -u e2e start-xvfb \n\
