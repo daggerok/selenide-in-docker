@@ -30,6 +30,8 @@ class `What can I say? Kotlin is awesome!`(@LocalServerPort val port: Int) {
   @Test
   fun `test everything in single success flow`() {
 
+
+
     // unauthorized user mast be redirected to login page,
     // so sign in with credentials maksimko / passwordinko
     open("http://127.0.0.1:$port")

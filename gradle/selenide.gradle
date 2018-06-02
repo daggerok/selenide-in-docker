@@ -2,6 +2,7 @@
  * Selenide / drivers dependencies...
  */
 dependencies {
+  testImplementation("org.testcontainers:selenium:1.7.3")
   testImplementation("com.codeborne:selenide:$selenideVersion") {
     exclude module: "selenium-opera-driver"
     exclude module: "selenium-safari-driver"
@@ -15,22 +16,27 @@ dependencies {
   testImplementation("com.codeborne:phantomjsdriver:$phantomjsDriverVersion")
 }
 
-static def findAllSelenideSystemProps() {
-  System.properties?.findAll {
-    it.key == "remote" ||
-        it.key.startsWith("selenide") ||
-        it.key.startsWith("webdriver")
-  } ?: [:]
+static def findE2ESystemProps() {
+  System.properties?.findAll { k, v ->
+    [
+        "remote",
+        "BUILD_URL",
+        "file.encoding",
+        "selenide.browser",
+        "selenide.headless",
+        "webdriver"
+    ].contains(k)
+  }
 }
 
-final String selenideBrowser = "selenide.browser"
-//final String defaultBrowser = "phantomjs"
-final String defaultBrowser = "chrome"
-
 test {
-  systemProperties = findAllSelenideSystemProps() + [
+  def browser = System.getProperty("selenide.browser", "chrome" /*phanthomjs*/)
+  def buildUrl = System.getenv()["BUILD_URL"]
+  systemProperties = findE2ESystemProps()?: [:] + [
+      "BUILD_URL": buildUrl,
+      "file.encoding": "UTF-8",
+      "selenide.browser": browser,
       "webdriver.chrome.verboseLogging": "true",
-      "selenide.browser": System.getProperty(selenideBrowser, defaultBrowser),
   ] + (
     project.hasProperty("remote") ? [ "remote": "http://127.0.0.1:4444/wd/hub" ] : [:]
   )
@@ -38,8 +44,8 @@ test {
 
 ["firefox", "chrome", "phantomjs"].each { taskName ->
   Task e2eTestBrowserSelectorTask = tasks.create(name: taskName) {
-    def systemProps = findAllSelenideSystemProps()
-    systemProps["$selenideBrowser"] = taskName
+    def systemProps = findE2ESystemProps()
+    systemProps["selenide.browser"] = taskName
 
     doFirst {
       test {
@@ -50,11 +56,9 @@ test {
   test.shouldRunAfter(e2eTestBrowserSelectorTask)
 }
 
-final String selenideHeadless = "selenide.headless"
-
 task headless {
-  def systemProps = findAllSelenideSystemProps()
-  systemProps["$selenideHeadless"] = true
+  def systemProps = findE2ESystemProps()
+  systemProps["selenide.headless"] = true
 
   doFirst {
     test {
@@ -64,8 +68,8 @@ task headless {
 }
 
 task headful {
-  def systemProps = findAllSelenideSystemProps()
-  systemProps["$selenideHeadless"] = false
+  def systemProps = findE2ESystemProps()
+  systemProps["selenide.headless"] = false
 
   doFirst {
     test {

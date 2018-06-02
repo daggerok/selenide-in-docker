@@ -5,3 +5,6 @@
 support@travis-ci.com-*
 Dockerfile*
 README.adoc
+docker-old-manual-builds
+build
+out
