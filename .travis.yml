@@ -23,13 +23,15 @@ before_script:
 - sudo dpkg -i google-chrome*.deb >/dev/null
 
 script:
-- ./gradlew -S clean test headless chrome >/dev/null
+#- ./gradlew -S clean test headless chrome >/dev/null
 - ./gradlew -S clean test chrome
-- ./gradlew -S clean check headful phantomjs
+#- ./gradlew -S clean check headful phantomjs
 - ./gradlew clean
 - ./gradlew --stop
 
 - docker build --no-cache --force-rm -t e2e-tests .
+- docker run --rm --name run-e2e-tests e2e-tests
+
 - mkdir -p ~/.gradle/caches/modules-2/files-2.1 ~/.m2/repository
 - docker run --rm --name run-e2e-tests
   -v ~/.m2/repository:/home/e2e/.m2/repository
